@@ -11,7 +11,7 @@ import de.fh_dortmund.throwit.menu.dummy.DummyContent;
 public class Menu extends AppCompatActivity
         implements  ThrowFragment.OnFragmentInteractionListener,
                     AchieveFragment.OnFragmentInteractionListener,
-                    ScoreFragment.OnListFragmentInteractionListener {
+                    HighscoreFragment.OnListFragmentInteractionListener {
 
 
     @Override
