@@ -1,21 +1,25 @@
 package de.fh_dortmund.throwit.menu;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 public class PagerAdapter extends FragmentPagerAdapter{
 
-        public PagerAdapter(FragmentManager fm) {
+        private Context ctx;
+
+        public PagerAdapter(FragmentManager fm, Context ctx) {
             super(fm);
+            this.ctx = ctx;
         }
 
         @Override
         public Fragment getItem(int pos) {
             switch(pos) {
-                case 0: return HighscoreFragment.newInstance(1);
-                case 1: return ThrowFragment.newInstance("Throw", "ok");
-                case 2: return AchieveFragment.newInstance("Score", "ok");
+                case 0: return HighscoreFragment.newInstance(3);
+                case 1: return ThrowFragment.newInstance(ctx);
+                case 2: return AchieveFragment.newInstance("","");
                 default: return new Fragment();
             }
         }

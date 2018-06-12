@@ -1,5 +1,7 @@
 package de.fh_dortmund.throwit.menu;
 
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,13 +16,16 @@ public class Menu extends AppCompatActivity
                     HighscoreFragment.OnListFragmentInteractionListener {
 
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
         ViewPager pager = findViewById(R.id.vpa_menu);
-        pager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
+        pager.setAdapter(new PagerAdapter(getSupportFragmentManager(),this));
         pager.setCurrentItem(1);
     }
 
@@ -28,10 +33,12 @@ public class Menu extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+
     }
 
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
     }
+
 }

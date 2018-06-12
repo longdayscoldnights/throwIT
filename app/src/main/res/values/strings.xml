@@ -4,4 +4,8 @@
     <string name="de_btn_login">Anmelden</string>
     <string name="de_btn_register">Registrieren</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="de_btn_start">Wurf starten!</string>
+    <string name="lbl_height">Höhe:</string>
+    <string name="lbl_count">0</string>
+    <string name="lvl_measure">m</string>
 </resources>

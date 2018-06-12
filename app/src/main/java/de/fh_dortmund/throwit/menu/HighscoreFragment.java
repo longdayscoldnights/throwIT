@@ -46,6 +46,7 @@ public class HighscoreFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    @SuppressWarnings("unused")
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
