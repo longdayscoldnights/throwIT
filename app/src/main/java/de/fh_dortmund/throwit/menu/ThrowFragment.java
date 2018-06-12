@@ -28,13 +28,7 @@ import static android.content.Context.SENSOR_SERVICE;
  * create an instance of this fragment.
  */
 public class ThrowFragment extends Fragment implements SensorEventListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private Context ctx;
+    // TODO: get parameters if needed
     private TextView value;
 
     private SensorManager mSensorManager = null;
@@ -52,10 +46,8 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
      *
      * @return A new instance of fragment ThrowFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ThrowFragment newInstance(Context ctx) {
+    public static ThrowFragment newInstance() {
         ThrowFragment fragment = new ThrowFragment();
-        fragment.setCtx(ctx);
         return fragment;
     }
 
@@ -70,17 +62,18 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View v = inflater.inflate(R.layout.fragment_throw, container, false);
         value = v.findViewById(R.id.lbl_value);
         Button start = v.findViewById(R.id.btn_start);
-            start.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initSensor();
-                }
-            });
+        mSensorManager = (SensorManager) inflater.getContext().getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initSensor();
+            }
+        });
 
         return v;
     }
@@ -126,8 +119,6 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
 
 
     private void initSensor() {
-        mSensorManager = (SensorManager) ctx.getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
         value.setText(String.valueOf(3));
     }
@@ -146,13 +137,6 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
     }
 
 
-    public Context getCtx() {
-        return ctx;
-    }
-
-    public void setCtx(Context ctx) {
-        this.ctx = ctx;
-    }
 
 
 }
