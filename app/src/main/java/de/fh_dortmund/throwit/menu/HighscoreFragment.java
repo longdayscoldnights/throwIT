@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import de.fh_dortmund.throwit.R;
-import de.fh_dortmund.throwit.menu.dummy.DummyContent;
-import de.fh_dortmund.throwit.menu.dummy.DummyContent.DummyItem;
+import de.fh_dortmund.throwit.menu.dummy.UserScoreContent;
+import de.fh_dortmund.throwit.menu.dummy.UserScoreContent.UserScoreItem;
 
 import java.util.List;
 
@@ -71,7 +71,7 @@ public class HighscoreFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyHighscoreRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyHighscoreRecyclerViewAdapter(UserScoreContent.returnHighHeight(), mListener));
         }
         return view;
     }
@@ -106,6 +106,6 @@ public class HighscoreFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(UserScoreItem item);
     }
 }

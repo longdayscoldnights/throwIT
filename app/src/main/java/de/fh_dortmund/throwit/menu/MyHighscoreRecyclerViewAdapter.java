@@ -6,23 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import de.fh_dortmund.throwit.R;
-import de.fh_dortmund.throwit.menu.HighscoreFragment.OnListFragmentInteractionListener;
-import de.fh_dortmund.throwit.menu.dummy.DummyContent.DummyItem;
-
 import java.util.List;
 
+import de.fh_dortmund.throwit.R;
+import de.fh_dortmund.throwit.menu.HighscoreFragment.OnListFragmentInteractionListener;
+import de.fh_dortmund.throwit.menu.dummy.UserScoreContent.UserScoreItem;
+
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link UserScoreItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyHighscoreRecyclerViewAdapter extends RecyclerView.Adapter<MyHighscoreRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<UserScoreItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyHighscoreRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyHighscoreRecyclerViewAdapter(List<UserScoreItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,8 +37,9 @@ public class MyHighscoreRecyclerViewAdapter extends RecyclerView.Adapter<MyHighs
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mNameView.setText(mValues.get(position).name);
+        holder.mScoreView.setText(String.valueOf(mValues.get(position).score));
+        holder.mHeightView.setText(String.valueOf(mValues.get(position).height)+" m");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,20 +60,23 @@ public class MyHighscoreRecyclerViewAdapter extends RecyclerView.Adapter<MyHighs
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView mNameView;
+        public final TextView mScoreView;
+        public final TextView mHeightView;
+
+        public UserScoreItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mNameView = (TextView) view.findViewById(R.id.name);
+            mScoreView =(TextView) view.findViewById(R.id.score);
+            mHeightView = (TextView) view.findViewById(R.id.height);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mNameView.getText() + "'";
         }
     }
 }
