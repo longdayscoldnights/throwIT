@@ -32,20 +32,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_logo" />
 
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/btn2"
-        android:text="@string/de_btn_register"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login"
-        app:layout_constraintVertical_bias="0.272" />
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="347dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="username"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="294dp" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="348dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="password"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="340dp" />
+
+    <TextView
+        android:id="@+id/registerhere"
+        android:layout_width="346dp"
+        android:layout_height="43dp"
+        android:text="Register here"
+        android:textAlignment="center"
+        tools:layout_editor_absoluteX="22dp"
+        tools:layout_editor_absoluteY="450dp" />
 </android.support.constraint.ConstraintLayout>
