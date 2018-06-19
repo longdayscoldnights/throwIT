@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.RegisterActivity">
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="4dp" />
+
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Username"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="50dp"
+        android:layout_below="@+id/etName"
+
+        />
+
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="Password"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="96dp"
+        android:layout_below="@+id/etUsername"
+        />
+
+    <Button
+        android:id="@+id/bRegister"
+        android:layout_width="361dp"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="151dp"
+        android:layout_below="@+id/etPassword"
+        />
+
+</android.support.constraint.ConstraintLayout>

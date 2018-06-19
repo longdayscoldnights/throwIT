@@ -10,4 +10,5 @@
     <string name="lvl_measure">m</string>
     <string name="hint_password">Passwort</string>
     <string name="hint_username">Benutzername</string>
+    <string name="title_activity_temp">Temp</string>
 </resources>
