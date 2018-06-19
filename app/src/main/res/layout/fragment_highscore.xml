@@ -25,6 +25,7 @@
         android:textColor="@color/btn1" />
 
     <TextView
+
         android:id="@+id/score"
         android:layout_width="73dp"
         android:layout_height="match_parent"
@@ -43,5 +44,15 @@
         android:text="height"
         android:textAlignment="center"
         android:textColor="@color/btn2" />
+
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/white" />
+
 </LinearLayout>
 

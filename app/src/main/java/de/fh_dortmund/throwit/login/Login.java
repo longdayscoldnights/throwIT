@@ -1,20 +1,11 @@
 package de.fh_dortmund.throwit.login;
 
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import com.android.volley.Response;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import de.fh_dortmund.throwit.R;
 import de.fh_dortmund.throwit.menu.Menu;
@@ -30,17 +21,10 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Button login = this.findViewById(R.id.btn_login);
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchMenu();
-            }
-        });
 
         final EditText username = (EditText) findViewById(R.id.edit_username);
         final EditText password = (EditText) findViewById(R.id.edit_password);
-        final Button blogin = (Button) findViewById(R.id.btn_login);
+        final Button bLogin = (Button) findViewById(R.id.btn_login);
         final Button registerLink = (Button) findViewById(R.id.btn_register);
 
 
@@ -53,16 +37,17 @@ public class Login extends AppCompatActivity {
         });
 
 
-        blogin.setOnClickListener(new View.OnClickListener() {
+        bLogin.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v){
 
-                final String user = username.getText().toString();
-                final String pass = password.getText().toString();
+                //final String user = username.getText().toString();
+                //  final String pass = password.getText().toString();
+                launchMenu();
 
 
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                /*  Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
@@ -70,6 +55,8 @@ public class Login extends AppCompatActivity {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
 
+                            //TODO REMOVE LATER
+                            success = true;
                             if(success){
                                 // send to main activity
 
@@ -92,9 +79,9 @@ public class Login extends AppCompatActivity {
                         }
 
                     }
-                };
+                }; */
 
-                LoginRequest loginRequest = new LoginRequest(user, pass, responseListener);
+                // LoginRequest loginRequest = new LoginRequest(user, pass, responseListener);
             }
         });
     }
