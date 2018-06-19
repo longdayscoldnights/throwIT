@@ -12,47 +12,57 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="4dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="370dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/etName"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
+
         android:inputType="textPersonName"
         android:text="Username"
-        tools:layout_editor_absoluteX="7dp"
-        tools:layout_editor_absoluteY="50dp"
-        android:layout_below="@+id/etName"
-
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etName" />
 
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="370dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/etUsername"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPassword"
         android:text="Password"
-        tools:layout_editor_absoluteX="7dp"
-        tools:layout_editor_absoluteY="96dp"
-        android:layout_below="@+id/etUsername"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etUsername" />
 
     <Button
         android:id="@+id/bRegister"
         android:layout_width="361dp"
         android:layout_height="wrap_content"
-        android:text="Register"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="151dp"
         android:layout_below="@+id/etPassword"
-        />
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Register"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
 </android.support.constraint.ConstraintLayout>
