@@ -8,4 +8,6 @@
     <string name="lbl_height">Höhe:</string>
     <string name="lbl_count">0</string>
     <string name="lvl_measure">m</string>
+    <string name="hint_password">Passwort</string>
+    <string name="hint_username">Benutzername</string>
 </resources>
