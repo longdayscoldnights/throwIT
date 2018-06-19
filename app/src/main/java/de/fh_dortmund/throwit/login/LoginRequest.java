@@ -2,11 +2,12 @@ package de.fh_dortmund.throwit.login;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginRequest {
+public class LoginRequest extends StringRequest {
 
 
     private static final String LOGIN_REQUEST_URL = "Domain.php";

@@ -38,10 +38,10 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        final EditText username = (EditText) findViewById(R.id.username);
-        final EditText password = (EditText) findViewById(R.id.password);
+        final EditText username = (EditText) findViewById(R.id.edit_username);
+        final EditText password = (EditText) findViewById(R.id.edit_password);
         final Button blogin = (Button) findViewById(R.id.btn_login);
-        final TextView registerLink = (TextView) findViewById(R.id.registerhere);
+        final Button registerLink = (Button) findViewById(R.id.btn_register);
 
 
         registerLink.setOnClickListener(new View.OnClickListener(){ // Creating a listener which leads you from the start page to the register page
@@ -53,7 +53,8 @@ public class Login extends AppCompatActivity {
         });
 
 
-        bLogin.setOnClickListener(new View.onClickListener() {
+        blogin.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v){
 
