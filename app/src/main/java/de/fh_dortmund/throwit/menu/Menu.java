@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import de.fh_dortmund.throwit.R;
-import de.fh_dortmund.throwit.menu.dummy.DummyContent;
+import de.fh_dortmund.throwit.menu.dummy.UserScoreContent;
 
 public class Menu extends AppCompatActivity
         implements  ThrowFragment.OnFragmentInteractionListener,
@@ -34,7 +34,7 @@ public class Menu extends AppCompatActivity
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(UserScoreContent.UserScoreItem item) {
 
     }
 

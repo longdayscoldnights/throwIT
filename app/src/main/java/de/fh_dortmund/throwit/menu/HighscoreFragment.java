@@ -7,12 +7,16 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import de.fh_dortmund.throwit.R;
-import de.fh_dortmund.throwit.menu.dummy.DummyContent;
-import de.fh_dortmund.throwit.menu.dummy.DummyContent.DummyItem;
+import de.fh_dortmund.throwit.menu.dummy.UserScoreContent;
+import de.fh_dortmund.throwit.menu.dummy.UserScoreContent.UserScoreItem;
 
 import java.util.List;
 
@@ -29,6 +33,7 @@ public class HighscoreFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private RecyclerView saveRec;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -48,12 +53,34 @@ public class HighscoreFragment extends Fragment {
     }
     @SuppressWarnings("unused")
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_highscore_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.height:
+                saveRec.swapAdapter(new MyHighscoreRecyclerViewAdapter(UserScoreContent.returnHighHeight(), mListener),true);
+                return true;
+            case R.id.score:
+                saveRec.swapAdapter(new MyHighscoreRecyclerViewAdapter(UserScoreContent.returnHighScore(), mListener),true);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -61,7 +88,6 @@ public class HighscoreFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_highscore_list, container, false);
-
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -71,8 +97,10 @@ public class HighscoreFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyHighscoreRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyHighscoreRecyclerViewAdapter(UserScoreContent.returnHighHeight(), mListener));
+            saveRec = recyclerView;
         }
+
         return view;
     }
 
@@ -106,6 +134,6 @@ public class HighscoreFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(UserScoreItem item);
     }
 }

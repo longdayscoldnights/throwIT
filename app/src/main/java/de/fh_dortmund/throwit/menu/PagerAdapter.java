@@ -15,7 +15,7 @@ public class PagerAdapter extends FragmentPagerAdapter{
         @Override
         public Fragment getItem(int pos) {
             switch(pos) {
-                case 0: return HighscoreFragment.newInstance(3);
+                case 0: return HighscoreFragment.newInstance(1);
                 case 1: return ThrowFragment.newInstance();
                 case 2: return AchieveFragment.newInstance("","");
                 default: return new Fragment();
