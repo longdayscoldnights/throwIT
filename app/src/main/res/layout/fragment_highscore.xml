@@ -32,7 +32,8 @@
         android:gravity="center"
         android:text="score"
         android:textAlignment="center"
-        android:textColor="@color/ic_logo_background" />
+        android:textColor="@color/ic_logo_background"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/height"
@@ -41,7 +42,9 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="height"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textStyle="bold" />
 
 
 </LinearLayout>

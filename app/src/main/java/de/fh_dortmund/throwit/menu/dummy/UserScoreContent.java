@@ -32,9 +32,24 @@ public class UserScoreContent {
 
     static {
         // Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createUserScoreItem(String.valueOf(i)));
-        }
+        addItem(createUserScoreItem("tom", 1,2));
+        addItem(createUserScoreItem("frank", 5,8));
+        addItem(createUserScoreItem("stefan", 19,12));
+        addItem(createUserScoreItem("meier", 2,17));
+        addItem(createUserScoreItem("slayer", 19,15));
+        addItem(createUserScoreItem("würger", 3,10));
+        addItem(createUserScoreItem("xxxAwesomexxx", 19,10));
+        addItem(createUserScoreItem("der Alte", 7,20));
+        addItem(createUserScoreItem("Sick but normal", 19,23));
+        addItem(createUserScoreItem("NotaHero", 2,21));
+        addItem(createUserScoreItem("MasterxMaster", 19,20));
+        addItem(createUserScoreItem("Kaboom", 8,12));
+        addItem(createUserScoreItem("Susen", 1,22));
+        addItem(createUserScoreItem("Klara", 2,2));
+        addItem(createUserScoreItem("Anna", 1,5));
+        addItem(createUserScoreItem("Frank", 15,13));
+        addItem(createUserScoreItem("Wo bin ich", 1,1));
+        addItem(createUserScoreItem("Der Neue", 2,11));
     }
 
     public static List<UserScoreItem> returnHighScore(){
@@ -63,14 +78,18 @@ public class UserScoreContent {
         return ITEMS;
     }
 
+    private void newScore(String name, double multi, double height){
+        addItem(createUserScoreItem(name, multi, height));
+    }
 
+    
     private static void addItem(UserScoreItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(String.valueOf(item.id), item);
     }
 
-    private static UserScoreItem createUserScoreItem(String position) {
-        return new UserScoreItem(position, "placeholder"+position, Integer.valueOf(position)*100, Integer.valueOf(position)*10);
+    private static UserScoreItem createUserScoreItem(String name, double multi, double height) {
+        return new UserScoreItem(name, (multi*height), height);
     }
 
     private static String makeDetails(int position) {
@@ -86,16 +105,18 @@ public class UserScoreContent {
      * A dummy item representing a piece of content.
      */
     public static class UserScoreItem {
+        private static int classID;
         public final String id;
         public final String name;
         public final double score;
         public final double height;
 
-        public UserScoreItem(String id,String name, double score, double height) {
-            this.id = id;
+        private UserScoreItem(String name, double score, double height) {
+            this.id = String.valueOf(classID);
             this.name = name;
             this.score = score;
             this.height = height;
+            UserScoreItem.classID++;
         }
 
         @Override
