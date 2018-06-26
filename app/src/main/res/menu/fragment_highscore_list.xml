@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/height"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Height" />
+        <item
+            android:id="@+id/score"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Score" />
+</menu>

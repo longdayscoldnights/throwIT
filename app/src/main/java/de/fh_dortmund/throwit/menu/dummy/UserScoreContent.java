@@ -37,12 +37,6 @@ public class UserScoreContent {
         }
     }
 
-    public static List<UserScoreItem> returnReverse(){
-        List<UserScoreItem> reverseList = ITEMS;
-        Collections.reverse(reverseList);
-        return reverseList;
-    }
-
     public static List<UserScoreItem> returnHighScore(){
 
         class ScoreItemComperator implements Comparator<UserScoreItem> {
