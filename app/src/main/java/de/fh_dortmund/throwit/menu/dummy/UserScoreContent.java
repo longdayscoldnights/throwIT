@@ -78,11 +78,11 @@ public class UserScoreContent {
         return ITEMS;
     }
 
-    private void newScore(String name, double multi, double height){
+    public void newScore(String name, double multi, double height){
         addItem(createUserScoreItem(name, multi, height));
     }
 
-    
+
     private static void addItem(UserScoreItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(String.valueOf(item.id), item);
