@@ -119,7 +119,7 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
 
 
     private void initSensor() {
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         value.setText(String.valueOf(3));
     }
 
@@ -135,8 +135,6 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
-
-
 
 
 }
