@@ -1,6 +1,7 @@
 package de.fh_dortmund.throwit.menu;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -8,12 +9,20 @@ import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import de.fh_dortmund.throwit.R;
 
@@ -33,8 +42,8 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
 
     private SensorManager mSensorManager = null;
     private Sensor mAccelerometer = null;
-
     private OnFragmentInteractionListener mListener;
+    private ThrowCalculator tc;
 
     public ThrowFragment() {
         // Required empty public constructor
@@ -121,13 +130,48 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
     private void initSensor() {
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         value.setText(String.valueOf(3));
+        tc = new ThrowCalculator();
     }
 
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            value.setText(String.format("%.2f", event.values[1]));
+            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                value.setText(String.format("%.2f", event.values[0]));
+                tc.add((double)event.values[2], (double)event.values[1]);
+            }
+    }
+
+
+    public void writeToFile(String data)
+    {
+        // Get the directory for the user's public pictures directory.
+        String path =
+                Environment.getExternalStorageDirectory() + File.separator  + "Android";
+        // Create the folder.
+        File folder = new File(path);
+        folder.mkdirs();
+
+        // Create the file.
+        File file = new File(folder, "config.txt");
+
+        // Save your stream, don't forget to flush() it before closing it.
+
+        try
+        {
+            file.createNewFile();
+            FileOutputStream fOut = new FileOutputStream(file);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(data);
+
+            myOutWriter.close();
+
+            fOut.flush();
+            fOut.close();
+        }
+        catch (IOException e)
+        {
+            Log.e("Exception", "File write failed: " + e.toString());
         }
     }
 

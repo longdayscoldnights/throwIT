@@ -19,7 +19,7 @@ public class ThrowCalculator {
         accel = new LinkedList<>();
     }
 
-    public boolean add(Double acceleration, Long timestamp) {
+    public boolean add(Double acceleration, Double timestamp) {
         return accel.add(new Pair(acceleration, timestamp));
     }
 
@@ -31,7 +31,7 @@ public class ThrowCalculator {
     public double calculateHeight() {
 
         // Keine Daten führt zum werfen von NoDataException durch Interpolator
-        if(accel.isEmpty())
+        if(accel.size() < 4)
             return 0.0;
 
         // Daten aus List in die durch den Interpolator benötigten double Arrays auslesen
@@ -47,7 +47,7 @@ public class ThrowCalculator {
         UnivariateInterpolator approximator = new LoessInterpolator();
         UnivariateFunction accelerationFunction = approximator.interpolate(time, acceleration);
 
-        // Approximierte Beschleunigungsfunktion für je einen Zeitschritt bestimmt integrieren
+        // Approximierte Beschleunigungsfunktion für je einen Zeitschritt bestimmt integrieren TODO nope über ganzen Raum integrieren und v(0) bestimmen
         UnivariateIntegrator integrator = new TrapezoidIntegrator();
         double[] velocity = new double[time.length];
         for(int i = 0; i < time.length; i++) {
@@ -63,9 +63,9 @@ public class ThrowCalculator {
 
     class Pair {
         private Double acceleration;
-        private Long timestamp;
+        private Double timestamp;
 
-        Pair(Double acceleration, Long timestamp) {
+        Pair(Double acceleration, Double timestamp) {
             this.acceleration = acceleration;
             this.timestamp = timestamp;
         }
@@ -77,11 +77,11 @@ public class ThrowCalculator {
             this.acceleration = acceleration;
         }
 
-        public Long getTimestamp() {
+        public Double getTimestamp() {
             return timestamp;
         }
 
-        public void setTimestamp(Long timestamp) {
+        public void setTimestamp(Double timestamp) {
             this.timestamp = timestamp;
         }
     }
