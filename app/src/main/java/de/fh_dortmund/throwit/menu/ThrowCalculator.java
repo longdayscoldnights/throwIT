@@ -1,11 +1,17 @@
 package de.fh_dortmund.throwit.menu;
 
-import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.analysis.integration.TrapezoidIntegrator;
-import org.apache.commons.math3.analysis.integration.UnivariateIntegrator;
-import org.apache.commons.math3.analysis.interpolation.LoessInterpolator;
-import org.apache.commons.math3.analysis.interpolation.UnivariateInterpolator;
+import android.util.Log;
 
+import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.analysis.integration.RombergIntegrator;
+import org.apache.commons.math3.analysis.integration.UnivariateIntegrator;
+import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
+import org.apache.commons.math3.analysis.interpolation.UnivariateInterpolator;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
+import org.apache.commons.math3.util.Pair;
+
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,14 +19,14 @@ import java.util.List;
  * @author Bijan Riesenberg
  */
 public class ThrowCalculator {
-    List<Pair> accel;
+    List<Pair<Double, Long>> accel;
 
     public ThrowCalculator() {
         accel = new LinkedList<>();
     }
 
-    public boolean add(Double acceleration, Double timestamp) {
-        return accel.add(new Pair(acceleration, timestamp));
+    public boolean add(Double acceleration, Long timestamp) {
+        return accel.add(new Pair<>(acceleration, timestamp));
     }
 
     /**
@@ -38,52 +44,40 @@ public class ThrowCalculator {
         double[] time = new double[accel.size()];
         double[] acceleration = new double[accel.size()];
         int count = 0;
-        for(Pair p: accel) {
-            time[count] = p.getTimestamp().doubleValue();
-            acceleration[count] = p.getAcceleration();
+        for(Pair<Double, Long> p: accel) {
+            time[count] = p.getSecond();
+            acceleration[count] = p.getFirst();
+            count++;
         }
-
         // Beschleunigung(Zeit) mit Local Regression approximieren
-        UnivariateInterpolator approximator = new LoessInterpolator();
+
+        UnivariateInterpolator approximator = new SplineInterpolator();
         UnivariateFunction accelerationFunction = approximator.interpolate(time, acceleration);
 
         // Approximierte Beschleunigungsfunktion für je einen Zeitschritt bestimmt integrieren TODO nope über ganzen Raum integrieren und v(0) bestimmen
-        UnivariateIntegrator integrator = new TrapezoidIntegrator();
+        UnivariateIntegrator integrator = new RombergIntegrator();
         double[] velocity = new double[time.length];
-        for(int i = 0; i < time.length; i++) {
-                velocity[i] = integrator.integrate(100, accelerationFunction, i,i+1);
-        }
+      /*  for(int i = 0; i < time.length-1; i++) {
+            velocity[i] = integrator.integrate(Integer.MAX_VALUE, accelerationFunction, i, i + 1);
+            System.out.println(velocity[i]);
+        }*/
+
+
+        System.out.println(integrator.integrate(Integer.MAX_VALUE, accelerationFunction, 0, accel.size()-1));
+
+
 
         // Aus den bestimmten Integralen Geschwindigkeitsfunktion approximieren, dann das 2. Integral
         UnivariateFunction velocityFunction = approximator.interpolate(time, velocity);
-        return integrator.integrate(100, velocityFunction, 0, accel.size());
+        PolynomialFunction[] pf = ((PolynomialSplineFunction) velocityFunction).getPolynomials();
+        for(PolynomialFunction p: pf)
+            System.out.println(p);
+        return integrator.integrate(Short.MAX_VALUE, velocityFunction, 0, accel.size()-1);
     }
 
-
-
-    class Pair {
-        private Double acceleration;
-        private Double timestamp;
-
-        Pair(Double acceleration, Double timestamp) {
-            this.acceleration = acceleration;
-            this.timestamp = timestamp;
-        }
-        public Double getAcceleration() {
-            return acceleration;
-        }
-
-        public void setAcceleration(Double acceleration) {
-            this.acceleration = acceleration;
-        }
-
-        public Double getTimestamp() {
-            return timestamp;
-        }
-
-        public void setTimestamp(Double timestamp) {
-            this.timestamp = timestamp;
-        }
+    public List<Pair<Double, Long>> getList() {
+        return accel;
     }
+
 
 }

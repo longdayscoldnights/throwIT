@@ -42,6 +42,7 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
 
     private SensorManager mSensorManager = null;
     private Sensor mAccelerometer = null;
+    private double throwstart;
     private OnFragmentInteractionListener mListener;
     private ThrowCalculator tc;
 
@@ -129,8 +130,9 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
 
     private void initSensor() {
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-        value.setText(String.valueOf(3));
+        value.setText(String.valueOf("~"));
         tc = new ThrowCalculator();
+        throwstart = System.nanoTime();
     }
 
 
@@ -138,47 +140,13 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                 value.setText(String.format("%.2f", event.values[0]));
-                tc.add((double)event.values[2], (double)event.values[1]);
+                tc.add((double)event.values[2], (long)(System.nanoTime() - throwstart));
             }
-    }
-
-
-    public void writeToFile(String data)
-    {
-        // Get the directory for the user's public pictures directory.
-        String path =
-                Environment.getExternalStorageDirectory() + File.separator  + "Android";
-        // Create the folder.
-        File folder = new File(path);
-        folder.mkdirs();
-
-        // Create the file.
-        File file = new File(folder, "config.txt");
-
-        // Save your stream, don't forget to flush() it before closing it.
-
-        try
-        {
-            file.createNewFile();
-            FileOutputStream fOut = new FileOutputStream(file);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-            myOutWriter.append(data);
-
-            myOutWriter.close();
-
-            fOut.flush();
-            fOut.close();
-        }
-        catch (IOException e)
-        {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
-
 
 }
