@@ -1,15 +1,12 @@
 package de.fh_dortmund.throwit.menu;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,11 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 import de.fh_dortmund.throwit.R;
 
@@ -40,20 +35,21 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
     // TODO: get parameters if needed
     private TextView value;
 
+
+    private static final int AVGVALUESSAVED = 50;
     private SensorManager mSensorManager = null;
     private Sensor mAccelerometer = null;
     private double throwstart;
     private OnFragmentInteractionListener mListener;
     private ThrowCalculator tc;
+    private List<Double> lastNValues;
+    private boolean stopListening = false;
 
     public ThrowFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
      * @return A new instance of fragment ThrowFragment.
      */
     public static ThrowFragment newInstance() {
@@ -61,12 +57,12 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,12 +84,14 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
         return v;
     }
 
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -106,25 +104,27 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
         }
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+    private double mean(List<Double> values){
+        if(values == null || values.isEmpty())
+            return 0.0d;
+        double erg = 0.0d;
+        for(Double d: values)
+            erg += d;
+        return erg/values.size();
     }
 
 
@@ -132,17 +132,30 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         value.setText(String.valueOf("~"));
         tc = new ThrowCalculator();
+        lastNValues = new LinkedList<>();
         throwstart = System.nanoTime();
     }
 
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                value.setText(String.format("%.2f", event.values[0]));
-                tc.add((double)event.values[2], (long)(System.nanoTime() - throwstart));
+            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER && !stopListening) {
+                // Invertieren da negative Werte Erhöhung der y Koordinate indizieren &
+                // g-Kraft abziehen
+                double verticalAcceleration = -1*(event.values[2] -9.81d);
+                Log.e("VertAcc: ", ""+verticalAcceleration);
+                value.setText(String.format(Locale.getDefault(),"%.3f", verticalAcceleration));
+                tc.add(verticalAcceleration, (long)(System.nanoTime() - throwstart));
+                lastNValues.add(0,verticalAcceleration);
+                if(lastNValues.size() > AVGVALUESSAVED)
+                    lastNValues.remove(AVGVALUESSAVED);
+                if(mean(lastNValues) < 0) {
+                    mSensorManager.unregisterListener(this);
+                    value.setText(String.format(Locale.getDefault(), "%.2f", tc.calculateHeight()));
+                }
             }
     }
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
