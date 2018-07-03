@@ -24,8 +24,7 @@ import java.util.List;
  */
 public class ThrowCalculator {
     List<Pair<Double, Long>> accel;
-    private static final int MINSAMPLEAMOUNT= 10;
-    private static final int DFTSIZE= 16; //DFSIZE ∊ 2^n
+    private static final int DFTSIZE= 16; //DFTSIZE ∊ 2^n da FFT sonst nicht funktioniert!
 
     public ThrowCalculator() {
         accel = new LinkedList<>();
@@ -41,7 +40,7 @@ public class ThrowCalculator {
      * @return Bestimmtes Integral der Approximierten Geschwindigkeitsfunktion über den gemessenen Zeitraum
      */
     public double calculateHeight() {
-            if(accel.size() < MINSAMPLEAMOUNT)
+            if(accel.size() < DFTSIZE)
                 return 0.0;
             double result = 0.0;
 
@@ -122,7 +121,7 @@ public class ThrowCalculator {
 
 
     public double calculateSamplingRate(double[] time) {
-        assert time != null && time.length >= MINSAMPLEAMOUNT;
+        assert time != null && time.length >= DFTSIZE;
 //        System.out.println(time.length);
 //        System.out.println("Endtime " + time[time.length-1]);
 //        System.out.println("Starttime: "+time[0]);
