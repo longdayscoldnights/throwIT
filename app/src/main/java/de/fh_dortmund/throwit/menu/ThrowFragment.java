@@ -15,6 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -36,7 +39,7 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
     private TextView value;
 
 
-    private static final int AVGVALUESSAVED = 50;
+    private static final int AVGVALUESSAVED = 10;
     private SensorManager mSensorManager = null;
     private Sensor mAccelerometer = null;
     private double throwstart;
@@ -118,13 +121,12 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
     }
 
 
-    private double mean(List<Double> values){
+    private double median(List<Double> values){
         if(values == null || values.isEmpty())
-            return 0.0d;
-        double erg = 0.0d;
-        for(Double d: values)
-            erg += d;
-        return erg/values.size();
+            return 0;
+        Collections.sort(values);
+        return values.get(values.size()/2);
+
     }
 
 
@@ -142,14 +144,19 @@ public class ThrowFragment extends Fragment implements SensorEventListener {
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER && !stopListening) {
                 // Invertieren da negative Werte Erhöhung der y Koordinate indizieren &
                 // g-Kraft abziehen
-                double verticalAcceleration = -1*(event.values[2] -9.81d);
-                Log.e("VertAcc: ", ""+verticalAcceleration);
+                double verticalAcceleration = (event.values[2] -9.81d);
+                Log.i("VertAccelleration: ", ""+verticalAcceleration);
                 value.setText(String.format(Locale.getDefault(),"%.3f", verticalAcceleration));
+
                 tc.add(verticalAcceleration, (long)(System.nanoTime() - throwstart));
                 lastNValues.add(0,verticalAcceleration);
+
                 if(lastNValues.size() > AVGVALUESSAVED)
                     lastNValues.remove(AVGVALUESSAVED);
-                if(mean(lastNValues) < 0) {
+
+                if(lastNValues.size() == AVGVALUESSAVED &&
+                        median(lastNValues) < 0 &&
+                        System.nanoTime()-throwstart > 1000000000) {
                     mSensorManager.unregisterListener(this);
                     value.setText(String.format(Locale.getDefault(), "%.2f", tc.calculateHeight()));
                 }

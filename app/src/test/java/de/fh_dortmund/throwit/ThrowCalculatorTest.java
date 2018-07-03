@@ -24,12 +24,14 @@ public class ThrowCalculatorTest {
         assertTrue(new ThrowCalculator().calculateHeight() == 0.0);
     }
 
+
     @Test
     public void throwCalculator_OneValue() {
         ThrowCalculator tc = new ThrowCalculator();
         tc.add(2.1, 0L);
         assertTrue(tc.calculateHeight() == 0.0);
     }
+
 
     @Test
     public void throwCalculator_addTest() {
@@ -75,6 +77,7 @@ public class ThrowCalculatorTest {
         assertEquals(1, height, 2.0);
     }
 
+
     @Test
     public void throwCalculator_100Values() {
         ThrowCalculator tc = new ThrowCalculator();
@@ -97,7 +100,6 @@ public class ThrowCalculatorTest {
         System.out.println("10234Values: "+height);
         assertEquals(220, height, 15.0);
     }
-
 
 
     private List<Pair<Double,Long>> generateTestData(int k) {
