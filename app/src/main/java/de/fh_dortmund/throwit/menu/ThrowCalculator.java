@@ -23,7 +23,7 @@ import java.util.List;
  * @author Bijan Riesenberg
  */
 public class ThrowCalculator {
-    List<Pair<Double, Long>> accel;
+    private List<Pair<Double, Long>> accel;
     private static final int DFTSIZE= 16; //DFTSIZE ∊ 2^n da FFT sonst nicht funktioniert!
 
     public ThrowCalculator() {
@@ -35,25 +35,21 @@ public class ThrowCalculator {
     }
 
     /**
-     * Integrale sind zu schwer, darum FFT :)
+     * Integrale sind zu schwer, darum FFT
      * Lang lebe Fourier!
-     * @return Bestimmtes Integral der Approximierten Geschwindigkeitsfunktion über den gemessenen Zeitraum
+     * @return Höhe berechnet nach inverser FFT der FFT der vertikalen Beschleunigung elementweise geteilt durch Signalrate
      */
     public double calculateHeight() {
             if(accel.size() < DFTSIZE)
                 return 0.0;
+
             double result = 0.0;
-
-
             for(int k = 0; k<accel.size()/DFTSIZE;k++){
+
                 // Daten auslesen
                 double[] time = new double[DFTSIZE];
                 double[] acceleration = new double[DFTSIZE];
 
-//                System.out.println();
-//                System.out.println(DFTSIZE*k);
-//                System.out.println(DFTSIZE*k+16);
-//                System.out.println();
 
                 int count = 0;
                 for(Pair<Double, Long> p: accel.subList(DFTSIZE*k,DFTSIZE*k+16)) {
@@ -65,74 +61,28 @@ public class ThrowCalculator {
 
                 FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
                 Complex[] accelFrequency = fft.transform(acceleration, TransformType.FORWARD);
-                double frequencyRate = calculateSamplingRate(time);
 
+
+                double frequencyRate = calculateSamplingRate(time);
                 for(int i = 0; i < accelFrequency.length; i++)
                     accelFrequency[i] = accelFrequency[i].divide(Math.pow(frequencyRate,2));
-                //System.out.println("SamplingRate: "+frequencyRate);
+
                 Complex[] displacement = fft.transform(accelFrequency, TransformType.INVERSE);
                 for(Complex d: displacement)
                     result += d.abs();
-
             }
+
         return result;
 
     }
 
-     /**   // Keine Daten führt zum werfen von NoDataException durch Interpolator
-        if(accel.size() < 4)
-            return 0.0;
-
-        // Daten aus List in die durch den Interpolator benötigten double Arrays auslesen
-        double[] time = new double[accel.size()];
-        double[] acceleration = new double[accel.size()];
-        int count = 0;
-        for(Pair<Double, Long> p: accel) {
-            time[count] = p.getSecond();
-            acceleration[count] = p.getFirst();
-            count++;
-        }
-        // Beschleunigung(Zeit) mit Local Regression approximieren
-
-        UnivariateInterpolator approximator = new SplineInterpolator();
-        UnivariateFunction accelerationFunction = approximator.interpolate(time, acceleration);
-
-        // Approximierte Beschleunigungsfunktion für je einen Zeitschritt bestimmt integrieren TODO nope über ganzen Raum integrieren und v(0) bestimmen
-        UnivariateIntegrator integrator = new RombergIntegrator();
-        double[] velocity = new double[time.length];
-        for(int i = 0; i < time.length-1; i++) {
-            velocity[i] = integrator.integrate(Integer.MAX_VALUE, accelerationFunction, i, i + 1);
-            System.out.println(velocity[i]);
-        }
-
-
-        System.out.println(integrator.integrate(Integer.MAX_VALUE, accelerationFunction, 0, accel.size()-1));
-
-
-
-        // Aus den bestimmten Integralen Geschwindigkeitsfunktion approximieren, dann das 2. Integral
-        UnivariateFunction velocityFunction = approximator.interpolate(time, velocity);
-        PolynomialFunction[] pf = ((PolynomialSplineFunction) velocityFunction).getPolynomials();
-        for(PolynomialFunction p: pf)
-            System.out.println(p);
-        return integrator.integrate(Short.MAX_VALUE, velocityFunction, 0, accel.size()-1);
-
-        */
-
-
+    /**
+     * @param time Array mit Timestamps in ns
+     * @return Frequenzrate Messungen/Zeit
+     */
     public double calculateSamplingRate(double[] time) {
         assert time != null && time.length >= DFTSIZE;
-//        System.out.println(time.length);
-//        System.out.println("Endtime " + time[time.length-1]);
-//        System.out.println("Starttime: "+time[0]);
-//        System.out.println("Zeitdauer: " + ((time[time.length-1]-time[0])/1000000000));
         return time.length/((time[time.length-1]-time[0])/1000000000);
     }
-
-
-    public List<Pair<Double, Long>> getList() {
-        return accel;
-    }
-
 
 }
