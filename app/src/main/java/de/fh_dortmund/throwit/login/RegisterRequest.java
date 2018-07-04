@@ -9,7 +9,7 @@ import java.util.Map;
 public class RegisterRequest extends StringRequest {
 
 
-    private static final String REGISTER_REQUEST_URL = "Domain.php";
+    private static final String REGISTER_REQUEST_URL = "http://h2788431.stratoserver.net/*";
     private Map<String, String> params;
 
 
