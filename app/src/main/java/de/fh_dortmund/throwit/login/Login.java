@@ -89,7 +89,7 @@ public class Login extends AppCompatActivity {
         registerLink.setOnClickListener(new View.OnClickListener(){ // Creating a listener which leads you from the start page to the register page
             @Override
             public void onClick(View v){
-               createUserAccount();
+                createUserAccount();
             }
         });
 
@@ -109,11 +109,11 @@ public class Login extends AppCompatActivity {
         });
 
         device.setOnClickListener(new View.OnClickListener() { // Getting device information
-           @Override
-           public void onClick(View v){
-               DeviceInformation d = new DeviceInformation();
-               Log.i("device: ",d.getDeviceName());
-           }
+            @Override
+            public void onClick(View v){
+                DeviceInformation d = new DeviceInformation();
+                Log.i("device: ",d.getDeviceName());
+            }
         });
 
     }
@@ -147,7 +147,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void updateStatus(){
-       // launchMenu();
+        // launchMenu();
         TextView status = (TextView) findViewById(R.id.tvStatus);
         FirebaseUser user = mAuth.getCurrentUser();
 
@@ -165,13 +165,14 @@ public class Login extends AppCompatActivity {
      */
     private void createUserAccount(){
 
-      String mail = etEmail.getText().toString();
-      String password = etPass.getText().toString();
+        String mail = etEmail.getText().toString();
+        String password = etPass.getText().toString();
 
-      mAuth.createUserWithEmailAndPassword(mail, password)// Using CreateUserWithEmailAndPassword Method --> Google Firebase
-              .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                  @Override
-                  public void onComplete(@NonNull Task<AuthResult> task) {
+        try {
+            mAuth.createUserWithEmailAndPassword(mail, password)// Using CreateUserWithEmailAndPassword Method --> Google Firebase
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
 
                      /* // Counting the number of characters of the password
                       String password = etPass.getText().toString();
@@ -180,29 +181,30 @@ public class Login extends AppCompatActivity {
                           count += 1;
                       } */
 
-                      if(task.isSuccessful()){
-                            Toast.makeText(Login.this, "User was created", Toast.LENGTH_SHORT).show();
-                        }
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Login.this, "User was created", Toast.LENGTH_SHORT).show();
+                            }
                        /* else if(count < 6){
                           Toast.makeText(Login.this, "Password needs at least 6 characters", Toast.LENGTH_SHORT).show();
-
                       } */
-                        else {
-                            Toast.makeText(Login.this, "CreationFailed", Toast.LENGTH_SHORT).show();
+                            else {
+                                Toast.makeText(Login.this, "CreationFailed", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                  }
-              })
-      .addOnFailureListener(new OnFailureListener() {
-          @Override
-          public void onFailure(@NonNull Exception e) {
-              if(e instanceof FirebaseAuthUserCollisionException){
-                  updateStatus("This E-Mail is already in use");
-              }
-              else {
-                  updateStatus(e.getLocalizedMessage());
-              }
-          }
-      });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            if (e instanceof FirebaseAuthUserCollisionException) {
+                                Toast.makeText(Login.this, "This E-Mail is already in use", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(Login.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }catch (IllegalArgumentException e) {
+            Toast.makeText(Login.this, "Username or Password can't be empty", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -210,53 +212,42 @@ public class Login extends AppCompatActivity {
     private void signUserIn(){
         String mail = etEmail.getText().toString();
         String password = etPass.getText().toString();
-
-        mAuth.signInWithEmailAndPassword(mail, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
+        try {
+            mAuth.signInWithEmailAndPassword(mail, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                launchMenu();
+                            } else {
+                                Toast.makeText(Login.this, "Login failed", Toast.LENGTH_SHORT).show();
+                            }
+                            updateStatus();
                         }
-                        else {
-                            Toast.makeText(Login.this, "Login failed", Toast.LENGTH_SHORT).show();
-                        }
-                        updateStatus();
-                    }
 
-                })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                if(e instanceof FirebaseAuthInvalidCredentialsException){
-                    updateStatus("Invalid password");
-                }
-                else if(e instanceof FirebaseAuthInvalidUserException){
-                    updateStatus("No Account with this E-Mail");
-                }
-                else {
-                    updateStatus(e.getLocalizedMessage());
-                }
-            }
-        });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                                Toast.makeText(Login.this, "Invalid password", Toast.LENGTH_SHORT).show();
+                            } else if (e instanceof FirebaseAuthInvalidUserException) {
+                                Toast.makeText(Login.this, "No Account with this E-Mail", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(Login.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        } catch (IllegalArgumentException iae) {
+            Toast.makeText(Login.this, "Username or Password can't be empty", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
     private void signOut(){ // there is no sign out Button but we have the method already
         mAuth.signOut();
         updateStatus();
-
     }
 
-    private void updateStatus(String status){
-        TextView tvStat = (TextView) findViewById(R.id.tvStatus);
-        tvStat.setText(status);
-    }
-
-
-
-    }
-
-
-
-
+}
